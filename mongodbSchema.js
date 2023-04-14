@@ -1,25 +1,30 @@
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
+
 const overviewSchema = new Schema ({
-  id: SERIAL id,
-  campus: hr-rpp
+  product_id: Number,
+  campus: { type: String, default: 'hr-rpp' },
   name: String,
   slogan: String,
   description: String,
   category: String,
   default_price: Number,
-  created_at: Date.now,
+  created_at: { type: Date, default: Date.now },
   updated_at: Date,
 })
 
 const individualProductSchema = new Schema ({
-  all of items from overviewSchema
+  overviewSchema,
   features: [
-    feature: String,
-    value: String,
+    {
+      feature: String,
+      value: String,
+    }
   ],
 })
 
 const stylesSchema = new Schema ({
-  product_id = foreign key from overviewSchema
+  product_id = //reference product id in OverviewSchema
   results: [
     style_id: Number,
     name: String,
@@ -62,15 +67,7 @@ const stylesSchema = new Schema ({
 })
 
 const relatedProductsSchema = new Schema({
-  [
-    Number
-  ]
+  array: { type: [Number], unique: true, }
 })
 
-//products/:product_id/related
-// [
-//   71698,
-//   71699,
-//   71704,
-//   71703
-// ]
+//mongoose Model

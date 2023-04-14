@@ -1,44 +1,57 @@
-CREATE SCHEMA overviewSchema;
+CREATE SCHEMA IF NOT EXISTS overviewSchema;
 
-CREATE TABLE overviewSchema.overview (
-  id: SERIAL PRIMARY KEY,
-  campus: hr-rpp
-  name: VARCHAR(255) NOT NULL,
-  slogan: VARCHAR(255) NOT NULL,
-  description: VARCHAR(255) NOT NULL,
-  category: VARCHAR(255) NOT NULL,
-  default_price: INTEGER,
-  created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP,,
+CREATE TABLE IF NOT EXISTS overviewSchema.overview (
+  product_id PRIMARY KEY,
+  campus VARCHAR(255) DEFAULT 'hr-rpp',
+  name VARCHAR(255) NOT NULL,
+  slogan VARCHAR(255) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  category VARCHAR(255) NOT NULL,
+  default_price INTEGER,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
  );
 
- CREATE TABLE overviewSchema.individualProduct (
-  all of items from overviewSchema
+ CREATE TABLE IF NOT EXISTS overviewSchema.individualProduct (
+  product_id INTEGER REFERENCES overview(product_id),
+  campus VARCHAR(255) DEFAULT 'hr-rpp',
+  name VARCHAR(255) NOT NULL,
+  slogan VARCHAR(255) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  category VARCHAR(255) NOT NULL,
+  default_price INTEGER,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   features: [
-    feature: VARCHAR(255) NOT NULL,
-    value: VARCHAR(255) NOT NULL,
-  ],
+    {
+      feature: VARCHAR(255) NOT NULL,
+      value: VARCHAR(255) NOT NULL,
+    }
+  ] DEFAULT '{}',
  );
 
- CREATE TABLE overviewSchema.styles (
-  product_id = foreign key from overviewSchema
-  results: [
-    style_id: Number,
-    name: String,
-    original_price: Number,
-    sale_price: Number,
-    default?: Boolean,
-    photos: [
+ CREATE TABLE IF NOT EXISTS overviewSchema.styles (
+  product_id INTEGER REFERENCES overview(product_id),
+  results [
+    style_id INTEGER,
+    name VARCHAR(255) NOT NULL,
+    original_price INTEGER,
+    sale_price INTEGER,
+    default? BOOLEAN,
+    photos [
       {
-        thumbnail_url: String,
-        url: String,
+        thumbnail_url VARCHAR(255) NOT NULL,
+        url VARCHAR(255) NOT NULL,
       },
     ],
+    //?
     skus: {
-    "2580526": {
-        quantity: Number,
-        "size": "XS"
+    NUMBER {
+        quantity INTEGER,
+        size VARCHAR(255) NOT NULL,
       },
+
+
     "2580527": {
         "quantity": 16,
         "size": "S"
@@ -63,8 +76,7 @@ CREATE TABLE overviewSchema.overview (
   ]
  );
 
- CREATE TABLE overviewSchema.relatedProducts (
-  [
-    Number
-  ]
+ CREATE TABLE IF NOT EXISTS overviewSchema.relatedProducts (
+  product_id INTEGER REFERENCES overview(product_id),
+  related_products INTEGER[]
  );
