@@ -1,19 +1,18 @@
 require('dotenv').config();
 
 const express = require('express')
+const { Client } = require('pg');
+
 const app = express()
 const port = process.env.PORT || 3000
 
-// const pgp = require('pg-promise')
-// const db = pgp('postgres://username:password@host:port/database')
-
-// db.one('SELECT $1 AS value', 123)
-//   .then((data) => {
-//     console.log('DATA:', data.value)
-//   })
-//   .catch((error) => {
-//     console.log('ERROR:', error)
-//   })
+const client = new Client({
+  user: 'your_database_user',
+  host: 'your_database_host',
+  database: 'your_database_name',
+  password: 'your_database_password',
+  port: 'your_database_port',
+});
 
 app.get('/', (req, res) => {
   res.send('Hello World!')

@@ -3,7 +3,6 @@ const { Schema } = mongoose;
 
 const overviewSchema = new Schema ({
   product_id: Number,
-  campus: { type: String, default: 'hr-rpp' },
   name: String,
   slogan: String,
   description: String,
@@ -14,7 +13,10 @@ const overviewSchema = new Schema ({
 })
 
 const individualProductSchema = new Schema ({
-  overviewSchema,
+  product_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Overview'
+  },
   features: [
     {
       feature: String,
@@ -24,13 +26,15 @@ const individualProductSchema = new Schema ({
 })
 
 const stylesSchema = new Schema ({
-  product_id = //reference product id in OverviewSchema
+  product_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Overview'
+  }
   results: [
     style_id: Number,
     name: String,
     original_price: Number,
     sale_price: Number,
-    default?: Boolean,
     photos: [
       {
         thumbnail_url: String,
@@ -38,36 +42,14 @@ const stylesSchema = new Schema ({
       },
     ],
     skus: {
-    "2580526": {
+      sku_id: {
         quantity: Number,
-        "size": "XS"
-      },
-    "2580527": {
-        "quantity": 16,
-        "size": "S"
-      },
-    "2580528": {
-        "quantity": 17,
-        "size": "M"
-      },
-    "2580529": {
-        "quantity": 10,
-        "size": "L"
-      },
-    "2580530": {
-        "quantity": 15,
-        "size": "XL"
-      },
-    "2580531": {
-        "quantity": 4,
-        "size": "XL"
+        size: String
       }
     }
   ]
 })
 
-const relatedProductsSchema = new Schema({
-  array: { type: [Number], unique: true, }
-})
-
-//mongoose Model
+const Overview = mongoose.model('Overview', overviewSchema);
+const IndividualProduct = mongoose.model('IndividualProduct', individualProductSchema);
+const Styles = mongoose.model('Styles', stylesSchema);
