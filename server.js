@@ -6,15 +6,27 @@ const { Client } = require('pg');
 const app = express()
 const port = process.env.PORT || 3000
 
-const client = new Client({
-  user: 'your_database_user',
-  host: 'your_database_host',
-  database: 'your_database_name',
-  password: 'your_database_password',
-  port: 'your_database_port',
+const db = new Client({
+  user: process.env.PSQL_USER,
+  host: 'localhost',
+  database: process.env.PSQL_DB,
+  password: process.env.PSQL_PASS,
+  port: 5432,
+});
+
+db.connect((e) => {
+  if (e) {
+    console.log(e);
+  } else {
+    console.log(`Connected to PSQL DB: ${process.env.PSQL_DB}`)
+  }
 });
 
 app.get('/', (req, res) => {
+  const query = db.query('SELECT * FROM aerio.overview WHERE product_id = 71697')
+  .then((data) => {
+    console.log(data.rows);
+  })
   res.send('Hello World!')
 })
 
