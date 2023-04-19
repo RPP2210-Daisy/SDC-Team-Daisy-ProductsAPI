@@ -1,10 +1,10 @@
 require('dotenv').config();
 
-const express = require('express')
+const express = require('express');
 const { Client } = require('pg');
 
-const app = express()
-const port = process.env.PORT || 3000
+const app = express();
+const port = process.env.PORT || 3000;
 
 const db = new Client({
   user: process.env.PSQL_USER,
@@ -18,18 +18,22 @@ db.connect((e) => {
   if (e) {
     console.log(e);
   } else {
-    console.log(`Connected to PSQL DB: ${process.env.PSQL_DB}`)
+    console.log(`Connected to PSQL DB: ${process.env.PSQL_DB}`);
   }
 });
 
 app.get('/', (req, res) => {
-  const query = db.query('SELECT * FROM aerio.overview WHERE product_id = 71697')
-  .then((data) => {
-    console.log(data.rows);
-  })
-  res.send('Hello World!')
-})
+  const d1 = new Date();
+  const query = db.query('SELECT * FROM aerio.overview WHERE product_id = 71697;')
+    .then((data) => {
+      console.log(data.rows);
+      const d2 = new Date();
+      const diff = (d2.getTime() - d1.getTime());
+      console.log(diff);
+    });
+  res.send('Hello World!');
+});
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+  console.log(`Example app listening on port ${port}`);
+});
