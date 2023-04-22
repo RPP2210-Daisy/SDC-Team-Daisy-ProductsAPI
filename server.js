@@ -32,13 +32,14 @@ app.get('/products/', (req, res) => {
 
 app.get('/products/:product_id', (req, res) => {
   const query = `
-  SELECT aerio.overview.*,
-  features_agg.features
+  SELECT aerio.overview.*, features_agg.features
   FROM aerio.overview
-  JOIN (SELECT product_id, json_object_agg(feature, value) AS features
-  FROM aerio.features
-  WHERE product_id = 2
-  GROUP BY product_id') AS features_agg ON aerio.overview.product_id = features_agg.product_id
+  JOIN (
+    SELECT product_id, json_object_agg(feature, value) AS features
+    FROM aerio.features
+    WHERE product_id = 71697
+    GROUP BY product_id
+  ) AS features_agg ON aerio.overview.product_id = features_agg.product_id;
   `;
   db.query(query)
     .then((data) => {
@@ -55,7 +56,7 @@ app.get('/products/:product_id/styles', (req, res) => {
       WHERE aerio.photos.style_id = aerio.styles.id) AS photos
   FROM aerio.styles
   JOIN aerio.skus ON aerio.styles.id = aerio.skus.style_id
-  WHERE aerio.styles.product_id = 71697
+  WHERE aerio.styles.product_id = 71699
   GROUP BY aerio.styles.id;
 `;
   db.query(query)
@@ -65,5 +66,7 @@ app.get('/products/:product_id/styles', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`SDC-Products listening on port ${port}`);
 });
+
+module.exports = app;
