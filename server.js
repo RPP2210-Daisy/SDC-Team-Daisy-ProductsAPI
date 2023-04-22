@@ -22,29 +22,6 @@ db.connect((e) => {
   }
 });
 
-app.get('/', (req, res) => {
-  const query = `
-  SELECT aerio.styles.*, json_object_agg(size, quantity) AS skus, json_agg(json_build_object('url', url, 'thumbnail_url', thumbnail_url)) AS photos
-  FROM aerio.styles
-  JOIN aerio.skus ON aerio.styles.id = aerio.skus.style_id
-  JOIN (
-    SELECT url, thumbnail_url
-    FROM aerio.photos
-    WHERE aerio.photos.style_id IN (
-      SELECT aerio.styles.id
-      FROM aerio.styles
-      WHERE aerio.styles.id = 3
-    )
-  ) AS photos ON aerio.styles.id = photos.style_id
-  WHERE aerio.styles.product_id = 3
-  GROUP BY aerio.styles.id;
-`;
-db.query(query)
-.then((data) => {
-      res.send(data.rows);
-    });
-});
-
 app.get('/products/', (req, res) => {
   const query = 'SELECT * from aerio.overview LIMIT 5;';
   db.query(query)
@@ -54,8 +31,33 @@ app.get('/products/', (req, res) => {
 });
 
 app.get('/products/:product_id', (req, res) => {
-  const join = 'SELECT product_id, json_object_agg(feature, value) AS features FROM aerio.features WHERE product_id = 2 GROUP BY product_id';
-  const query = `SELECT aerio.overview.*, features_agg.features FROM aerio.overview JOIN (${join}) AS features_agg ON aerio.overview.product_id = features_agg.product_id`;
+  const query = `
+  SELECT aerio.overview.*,
+  features_agg.features
+  FROM aerio.overview
+  JOIN (SELECT product_id, json_object_agg(feature, value) AS features
+  FROM aerio.features
+  WHERE product_id = 2
+  GROUP BY product_id') AS features_agg ON aerio.overview.product_id = features_agg.product_id
+  `;
+  db.query(query)
+    .then((data) => {
+      res.send(data.rows);
+    });
+});
+
+app.get('/products/:product_id/styles', (req, res) => {
+  const query = `
+  SELECT aerio.styles.*,
+    json_object_agg(size, quantity) AS skus,
+    (SELECT json_agg(json_build_object('url', url, 'thumbnail_url', thumbnail_url))
+      FROM aerio.photos
+      WHERE aerio.photos.style_id = aerio.styles.id) AS photos
+  FROM aerio.styles
+  JOIN aerio.skus ON aerio.styles.id = aerio.skus.style_id
+  WHERE aerio.styles.product_id = 71697
+  GROUP BY aerio.styles.id;
+`;
   db.query(query)
     .then((data) => {
       res.send(data.rows);
@@ -65,10 +67,3 @@ app.get('/products/:product_id', (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
-
-// mysql optimization ch8
-// summary of each idea
-// views "caching"
-// get rid of cnosole logs w morgan when stress testing
-
-// express middleware morgan for console logging
