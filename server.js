@@ -33,24 +33,43 @@ app.get('/products/', (req, res) => {
 });
 
 app.get('/products/:product_id', (req, res) => {
+  let productID;
+
+  if (req.params.product_id === 'null') {
+    productID = 71699;
+  } else {
+    productID = req.params.product_id;
+  }
+
   const query = `
   SELECT aerio.overview.*, features_agg.features
   FROM aerio.overview
   JOIN (
     SELECT product_id, json_agg(json_build_object('feature', feature, 'value', value)) AS features
     FROM aerio.features
-    WHERE product_id = ${req.params.product_id}
+    WHERE product_id = ${productID}
     GROUP BY product_id
   ) AS features_agg ON aerio.overview.product_id = features_agg.product_id;
   `;
 
   db.query(query)
     .then((data) => {
-      data ? res.send(data.rows[0]) : res.sendStatus(201);
+      res.send(data.rows[0]);
+    })
+    .catch((e) => {
+      console.log(e);
     });
 });
 
 app.get('/products/:product_id/styles', (req, res) => {
+  let productID;
+
+  if (req.params.product_id === 'null') {
+    productID = 71699;
+  } else {
+    productID = req.params.product_id;
+  }
+
   const query = `
   WITH styles_agg AS (
     SELECT
@@ -79,18 +98,28 @@ app.get('/products/:product_id/styles', (req, res) => {
         )
       ) AS styles
     FROM aerio.styles
-    WHERE aerio.styles.product_id = ${req.params.product_id}
+    WHERE aerio.styles.product_id = ${productID}
     GROUP BY aerio.styles.product_id
+  ),
+  results_array AS (
+    SELECT
+      product_id,
+      json_array_elements(styles) AS result
+    FROM styles_agg
   )
   SELECT
     product_id,
-    json_array_elements(styles) AS results
-  FROM styles_agg;
+    json_agg(result) AS results
+  FROM results_array
+  GROUP BY product_id;
   `;
 
   db.query(query)
     .then((data) => {
       res.send(data.rows[0]);
+    })
+    .catch((e) => {
+      console.log(e);
     });
 });
 
