@@ -35,7 +35,7 @@ app.get('/products/', (req, res) => {
 app.get('/products/:product_id', (req, res) => {
   let productID;
 
-  if (req.params.product_id === 'null') {
+  if (req.params.product_id === 'null' || req.params.product_id === 'undefined') {
     productID = 71699;
   } else {
     productID = req.params.product_id;
@@ -64,7 +64,7 @@ app.get('/products/:product_id', (req, res) => {
 app.get('/products/:product_id/styles', (req, res) => {
   let productID;
 
-  if (req.params.product_id === 'null') {
+  if (req.params.product_id === 'null' || req.params.product_id === 'undefined') {
     productID = 71699;
   } else {
     productID = req.params.product_id;
