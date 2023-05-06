@@ -1,14 +1,14 @@
 require('dotenv').config();
 
 const express = require('express');
-const { Client } = require('pg');
+const { Pool } = require('pg');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.static('./dist'));
 
-const db = new Client({
+const db = new Pool({
   user: process.env.PSQL_USER,
   host: 'localhost',
   database: process.env.PSQL_DB,
@@ -24,12 +24,14 @@ db.connect((e) => {
   }
 });
 
-app.get('/products/', (req, res) => {
-  const query = 'SELECT * FROM aerio.overview LIMIT 5;';
-  db.query(query)
-    .then((data) => {
-      res.send(data.rows);
-    });
+app.get('/products/', async (req, res) => {
+  try {
+    const query = 'SELECT * FROM aerio.overview LIMIT 5;';
+    const data = await db.query(query);
+    res.send(data.rows);
+  } catch (e) {
+    res.status(500).send('Server Error from /products');
+  }
 });
 
 app.get('/products/:product_id', (req, res) => {
