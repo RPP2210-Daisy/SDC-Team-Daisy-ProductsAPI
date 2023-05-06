@@ -20,7 +20,7 @@ function checkStatus(res, routeName) {
 }
 
 export const options = {
-  vus: 3,
+  vus: 500,
   duration: '30s',
 };
 
