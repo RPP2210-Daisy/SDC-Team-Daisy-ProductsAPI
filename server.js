@@ -2,6 +2,8 @@ require('dotenv').config();
 
 const express = require('express');
 const { Pool } = require('pg');
+const { createClient } = require('redis');
+const queryRedis = require('./queryRedis');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -16,6 +18,8 @@ const db = new Pool({
   port: 5432,
 });
 
+const redis = new createClient();
+
 db.connect((e) => {
   if (e) {
     console.log(e);
@@ -27,7 +31,8 @@ db.connect((e) => {
 app.get('/products/', async (req, res) => {
   try {
     const query = 'SELECT * FROM aerio.overview LIMIT 5;';
-    const data = await db.query(query);
+    const data = queryRedis(query, db, redis);
+
     res.send(data.rows);
   } catch (e) {
     res.status(500).send('Server Error from /products');
