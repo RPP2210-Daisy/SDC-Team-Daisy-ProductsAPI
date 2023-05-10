@@ -1,6 +1,6 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
-import { Counter, Gauge, Trend } from 'k6/metrics';
+import { Counter, Trend } from 'k6/metrics';
 
 const r1Latency = new Trend('R1 Latency');
 const r2Latency = new Trend('R2 Latency');
