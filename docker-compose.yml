@@ -1,0 +1,18 @@
+version: '3'
+services:
+  server:
+    build: .
+    ports:
+      - "3000:3000"
+    links:
+      - redis
+      - db
+    environment:
+      - REDIS_HOST=redis
+      - DB_HOST=db
+  redis:
+    image: "redis:alpine"
+  db:
+    image: "postgres:latest"
+    environment:
+      - POSTGRES_PASSWORD=${PSQL_PASS}
