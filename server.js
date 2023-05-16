@@ -10,17 +10,20 @@ const port = process.env.PORT || 3000;
 app.use(express.static('./dist'));
 
 const db = new Pool({
-  user: process.env.PSQL_USER,
-  host: 'localhost',
-  database: process.env.PSQL_DB,
-  password: process.env.PSQL_PASS,
+  user: process.env.POSTGRES_USER,
+  host: 'db',
+  database: process.env.POSTGRES_DB,
+  password: process.env.POSTGRES_PASS,
   port: 5432,
 });
 
-const redis = new createClient();
+const redis = new createClient({
+  host: 'redis',
+  port: 6379,
+});
 
-redis.connect();
 db.connect();
+redis.connect();
 
 app.get('/products', async (req, res) => {
   try {

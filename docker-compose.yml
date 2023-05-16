@@ -4,7 +4,7 @@ services:
     build: .
     ports:
       - "3000:3000"
-    links:
+    depends_on:
       - redis
       - db
     environment:
@@ -14,5 +14,13 @@ services:
     image: "redis:alpine"
   db:
     image: "postgres:latest"
+    restart: always
     environment:
-      - POSTGRES_PASSWORD=${PSQL_PASS}
+      POSTGRES_PASSWORD: ${PSQL_PASS}
+      POSTGRES_USER: ${PSQL_USER}
+      POSTGRES_DB: ${PSQL_DB}
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./sdc-aerio-all.sql:/docker-entrypoint-initdb.d/sdc-aerio-all.sql
+
+
