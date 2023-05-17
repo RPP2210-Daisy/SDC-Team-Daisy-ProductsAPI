@@ -12,13 +12,13 @@ app.use(express.static('./dist'));
 const db = new Pool({
   user: process.env.POSTGRES_USER,
   host: process.env.DB_HOST,
-  database: process.env.POSTGRES_DB,
+  database: 'db',
   password: process.env.POSTGRES_PASSWORD,
   port: 5432,
 });
 
 const redis = new Redis({
-  host: process.env.REDIS_HOST,
+  host: 'redis',
   port: 6379,
 });
 

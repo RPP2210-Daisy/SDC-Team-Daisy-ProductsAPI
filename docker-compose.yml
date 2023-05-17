@@ -1,7 +1,7 @@
-version: '3'
+version: '3.8'
 services:
   server:
-    build: .
+    image: kahlstorf1/sdcserver
     ports:
       - "3000:3000"
     depends_on:
@@ -10,20 +10,43 @@ services:
     environment:
       - REDIS_HOST=redis
       - DB_HOST=db
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+    secrets:
+      - source: postgres_user
+        target: POSTGRES_USER
+      - source: postgres_password
+        target: POSTGRES_PASSWORD
+      - source: postgres_db
+        target: POSTGRES_DB
   redis:
     image: "redis:alpine"
     ports:
       - "6379:6379"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
   db:
     image: "postgres:latest"
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER_FILE=/run/secrets/postgres_user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_DB_FILE=/run/secrets/postgres_db
     volumes:
       - ./aerio_dump.sql:/docker-entrypoint-initdb.d/aerio_dump.sql
+    secrets:
+      - postgres_user
+      - postgres_password
+      - postgres_db
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+secrets:
+  postgres_user:
+    external: true
+  postgres_password:
+    external: true
+  postgres_db:
+    external: true
