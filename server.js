@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const { Pool } = require('pg');
-const { createClient } = require('redis');
+const Redis = require('ioredis');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -17,13 +17,12 @@ const db = new Pool({
   port: 5432,
 });
 
-const redis = new createClient({
+const redis = new Redis({
   host: process.env.REDIS_HOST,
   port: 6379,
 });
 
 db.connect();
-redis.connect();
 
 app.get('/products', async (req, res) => {
   try {
