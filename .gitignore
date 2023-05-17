@@ -1,5 +1,7 @@
 node_modules
 .env
+dist/
 .nyc_output
 coverage
-dist
+/data
+aerio_dump.sql
