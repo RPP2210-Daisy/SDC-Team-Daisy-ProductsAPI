@@ -13,7 +13,7 @@ const db = new Pool({
   user: process.env.POSTGRES_USER,
   host: process.env.DB_HOST,
   database: process.env.POSTGRES_DB,
-  password: process.env.POSTGRES_PASS,
+  password: process.env.POSTGRES_PASSWORD,
   port: 5432,
 });
 
@@ -22,7 +22,17 @@ const redis = new Redis({
   port: 6379,
 });
 
-db.connect();
+const connectDB = async () => {
+  try {
+    await db.connect();
+    console.log('Connected to PostgreSQL')
+  } catch (err) {
+    console.error(`Failed to connect, retrying in 5 seconds... \n${err}`)
+    setTimeout(connectDB, 5000);
+  }
+};
+
+connectDB();
 
 app.get('/products', async (req, res) => {
   try {
