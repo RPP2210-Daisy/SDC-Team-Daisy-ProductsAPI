@@ -41,6 +41,8 @@ services:
       - postgres_db
     deploy:
       replicas: 1
+      placement:
+        constraints: [node.labels.db == true]
       restart_policy:
         condition: on-failure
 secrets:
