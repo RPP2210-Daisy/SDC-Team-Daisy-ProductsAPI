@@ -10,6 +10,7 @@ services:
     environment:
       - REDIS_HOST=redis
       - DB_HOST=db
+      - NEW_RELIC_APP_NAME=sdc
     secrets:
       - source: postgres_user
         target: postgres_user
@@ -58,4 +59,6 @@ secrets:
   postgres_password:
     external: true
   postgres_db:
+    external: true
+  NEW_RELIC_LICENSE_KEY:
     external: true
