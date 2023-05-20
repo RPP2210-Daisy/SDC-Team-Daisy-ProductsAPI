@@ -1,7 +1,10 @@
 'use strict'
+
+const fs = require('fs');
+
 exports.config = {
   app_name: [process.env.NEW_RELIC_APP_NAME],
-  license_key: process.env.NEW_RELIC_LICENSE_KEY,
+  license_key: fs.readFileSync('/run/secrets/NEW_RELIC_LICENSE_KEY', 'utf8').trim(),
   distributed_tracing: {
     enabled: true,
   },
@@ -19,4 +22,4 @@ exports.config = {
       'response.headers.setCookie*',
     ],
   },
-}
+};

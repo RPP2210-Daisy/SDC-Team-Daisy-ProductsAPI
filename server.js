@@ -27,10 +27,10 @@ const redis = new Redis({
 const connectDB = async () => {
   try {
     await db.connect();
-    console.log('Connected to PostgreSQL')
+    console.log('Connected to PostgreSQL');
   } catch (err) {
-    console.error(`Failed to connect, retrying in 5 seconds... \n${err}`)
-    setTimeout(connectDB, 5000);
+    console.error(`Failed to connect, retrying in 10 seconds... \n${err}`);
+    setTimeout(connectDB, 10000);
   }
 };
 
