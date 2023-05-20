@@ -2,3 +2,9 @@ node_modules
 .nyc_output
 dist
 coverage
+node_modules
+npm-debug.log
+.dockerignore
+Dockerfile
+.git
+.gitignore
