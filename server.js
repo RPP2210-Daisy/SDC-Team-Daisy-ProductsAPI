@@ -57,8 +57,7 @@ app.get('/products', async (req, res) => {
 
 app.get('/products/:product_id', async (req, res) => {
   try {
-    let productID;
-    typeof req.params.product_id === 'string' ? productID = 71697 : productID = req.params.product_id;
+    const productID = req.params.product_id;
 
     const cacheKey = `product_overview_${productID}`;
     let data = await redis.get(cacheKey);
@@ -91,8 +90,7 @@ app.get('/products/:product_id', async (req, res) => {
 
 app.get('/products/:product_id/styles', async (req, res) => {
   try {
-    let productID;
-    typeof req.params.product_id === 'string' ? productID = 71697 : productID = req.params.product_id;
+    const productID = req.params.product_id;
 
     const cacheKey = `product_${productID}_styles`;
     let data = await redis.get(cacheKey);
@@ -155,8 +153,7 @@ app.get('/products/:product_id/styles', async (req, res) => {
 
 app.get('/products/:product_id/related', async (req, res) => {
   try {
-    let productID;
-    typeof req.params.product_id === 'string' ? productID = 71697 : productID = req.params.product_id;
+    const productID = req.params.product_id;
 
     const cacheKey = `product_${productID}_related`;
     let data = await redis.get(cacheKey);
