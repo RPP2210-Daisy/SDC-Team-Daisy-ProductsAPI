@@ -1,4 +1,5 @@
 require('dotenv').config();
+const fs = require('fs');
 
 const express = require('express');
 const { Pool } = require('pg');
@@ -10,10 +11,10 @@ const port = process.env.PORT || 3000;
 app.use(express.static('./dist'));
 
 const db = new Pool({
-  user: process.env.POSTGRES_USER,
+  user: fs.readFileSync('/run/secrets/postgres_user', 'utf8').trim(),
   host: process.env.DB_HOST,
-  database: 'db',
-  password: process.env.POSTGRES_PASSWORD,
+  database: 'sdc',
+  password: fs.readFileSync('/run/secrets/postgres_password', 'utf8').trim(),
   port: 5432,
 });
 
