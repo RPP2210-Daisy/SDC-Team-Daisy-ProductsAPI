@@ -18,6 +18,8 @@ services:
         target: postgres_password
       - source: postgres_db
         target: postgres_db
+      - source: NEW_RELIC_LICENSE_KEY
+        target: NEW_RELIC_LICENSE_KEY
   redis:
     image: "redis:alpine"
     ports:

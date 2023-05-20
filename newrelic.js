@@ -3,7 +3,7 @@
 const fs = require('fs');
 
 exports.config = {
-  app_name: [process.env.NEW_RELIC_APP_NAME],
+  app_name: sdc,
   license_key: fs.readFileSync('/run/secrets/NEW_RELIC_LICENSE_KEY', 'utf8').trim(),
   distributed_tracing: {
     enabled: true,

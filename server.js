@@ -2,6 +2,8 @@ require('newrelic');
 require('dotenv').config();
 const fs = require('fs');
 
+console.log(fs.readFileSync('/run/secrets/NEW_RELIC_LICENSE_KEY', 'utf8').trim())
+
 const express = require('express');
 const { Pool } = require('pg');
 const Redis = require('ioredis');
