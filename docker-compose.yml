@@ -1,5 +1,17 @@
 version: '3.8'
 services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - server
+    deploy:
+      placement:
+        constraints: [node.role == manager]
   server:
     image: kahlstorf1/sdcserver:latest
     ports:
@@ -20,6 +32,8 @@ services:
         target: postgres_db
       - source: NEW_RELIC_LICENSE_KEY
         target: NEW_RELIC_LICENSE_KEY
+    deploy:
+      replicas: 5
   redis:
     image: "redis:alpine"
     ports:
