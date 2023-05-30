@@ -44,7 +44,7 @@ app.get('/products', async (req, res) => {
     if (!data) {
       const query = 'SELECT * FROM aerio.overview LIMIT 5;';
       data = await db.query(query);
-      redis.set(cacheKey, JSON.stringify(data));
+      await redis.set(cacheKey, JSON.stringify(data));
       res.send(data.rows[0]);
     } else {
       res.send(JSON.parse(data).rows);
@@ -74,8 +74,8 @@ app.get('/products/:product_id', async (req, res) => {
           ) AS features_agg ON aerio.overview.product_id = features_agg.product_id;
           `;
         data = await db.query(query, [productID]);
-        redis.set(cacheKey, JSON.stringify(data));
-      } catch (dbError) {
+        await redis.set(cacheKey, JSON.stringify(data));
+      } catch (err) {
         return res.status(500).send('Error querying the database');
       }
     } else {
@@ -139,7 +139,7 @@ app.get('/products/:product_id/styles', async (req, res) => {
       GROUP BY product_id;
       `;
       data = await db.query(query, [productID]);
-      redis.set(cacheKey, JSON.stringify(data));
+      await redis.set(cacheKey, JSON.stringify(data));
     } else {
       data = JSON.parse(data);
     }
@@ -164,7 +164,7 @@ app.get('/products/:product_id/related', async (req, res) => {
       WHERE product_id = $1;
     `;
       data = await db.query(query, productID);
-      redis.set(cacheKey, JSON.stringify(data), 'EX', 3600);
+      await redis.set(cacheKey, JSON.stringify(data), 'EX', 3600);
     } else {
       data = JSON.parse(data);
     }
