@@ -2,7 +2,7 @@ FROM node:18-alpine
 
 WORKDIR /rpp2210-sdc-daisy-overview
 
-COPY loaderio-896214824f5fcc8390746a1907dd53b5.txt ./dist/
+COPY loaderio-febc11e1fd60239ce50932484f7ddff5.txt ./dist/
 
 COPY package*.json ./
 
