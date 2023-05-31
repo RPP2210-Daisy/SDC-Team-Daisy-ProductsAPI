@@ -1,5 +1,6 @@
 require('dotenv').config();
 const fs = require('fs');
+
 process.env.NEW_RELIC_LICENSE_KEY = fs.readFileSync('/run/secrets/NEW_RELIC_LICENSE_KEY', 'utf8').trim();
 require('newrelic');
 
@@ -30,7 +31,6 @@ const connectDB = async () => {
     await db.connect();
     console.log('Connected to PostgreSQL');
   } catch (err) {
-    console.error(`Failed to connect, retrying in 10 seconds... \n${err}`);
     setTimeout(connectDB, 10000);
   }
 };
