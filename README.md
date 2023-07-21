@@ -18,15 +18,19 @@ Project is a REST API serving products data for an online e-commerce website. A 
 ## Routes:
 Project serves 4 total routes:
   Retrieve list of Products
+  
   */products - GET
 
   Retrieve specific product information
+  
   */products/:product_id - GET - Path Parameter: product_id (number)
 
   Retrieve product style information
+  
   */products/:product_id/styles - GET - Path Parameter: product_id (number)
 
   Retrieve related products of specific product
+  
   */products/:product_id/related - GET - Path Parameter: product_id (number)
 
 ## Description:
