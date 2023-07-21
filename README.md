@@ -16,22 +16,13 @@ Project is a REST API serving products data for an online e-commerce website. A 
 - [Installation](#Installation)
 
 ## Routes:
-Project serves 4 total routes:
-  Retrieve list of Products
-  
-  */products - GET
 
-  Retrieve specific product information
-  
-  */products/:product_id - GET - Path Parameter: product_id (number)
-
-  Retrieve product style information
-  
-  */products/:product_id/styles - GET - Path Parameter: product_id (number)
-
-  Retrieve related products of specific product
-  
-  */products/:product_id/related - GET - Path Parameter: product_id (number)
+| Route | Method | Description | Path Parameters |
+|-------|--------|-------------|-----------------|
+| /products | GET | Retrieves a list of all products | None |
+| /products/:product_id | GET | Retrieves information about a specific product | product_id (number) |
+| /products/:product_id/styles | GET | Retrieves style information about a specific product | product_id (number) |
+| /products/:product_id/related | GET | Retrieves related products for a specific product | product_id (number) |
 
 ## Description:
 This backend API for the Products microservice focused on supporting the full dataset for the existing front-end architecture of the e-commerce website. This project included the development of an automated ETL process to handle the migration of over 35 million records into a PostgreSQL database. The database was optimized via indexing, data aggregation, and Redis caching to handle 5,000 requests per second (RPS) at a latency of under 20ms.
@@ -47,5 +38,5 @@ Further scaling of the system (specifically increasing the number of the Node.js
   
 ## Installation:
 
-Detailed information about the installation process is available upon request. To give a brief overview, Docker is used extensively in this project for containerization and orchestration, providing a consistent environment for deployment. Docker Swarm is used to manage and scale the application across multiple nodes, further enhancing its performance and reliability.
+Detailed information about the installation process is available upon request. To give a brief overview, Docker is used extensively in this project for containerization and orchestration. Docker Swarm is used to manage and scale the application across multiple nodes, further enhancing its performance and reliability.
 
